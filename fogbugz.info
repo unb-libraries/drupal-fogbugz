@@ -1,0 +1,7 @@
+name = Custom Module
+description = Description of the module.
+package = Views
+core = 7.x
+php = 5.2
+
+files[] = includes/FogbugzConnection.inc

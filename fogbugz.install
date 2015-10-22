@@ -1,0 +1,58 @@
+<?php
+
+/**
+ * @file
+ * Install and uninstall code for the fogbugz module.
+ */
+
+/**
+ * Implements hook_install().
+ */
+function fogbugz_install() {
+  variable_set('fogbugz_protocol', NULL);
+  variable_set('fogbugz_hostname', NULL);
+  variable_set('fogbugz_port', NULL);
+  variable_set('fogbugz_user_email', NULL);
+  variable_set('fogbugz_user_password', NULL);
+}
+
+/**
+ * Implements hook_uninstall().
+ */
+function fogbugz_uninstall() {
+  variable_del('fogbugz_protocol');
+  variable_del('fogbugz_hostname');
+  variable_del('fogbugz_port');
+  variable_del('fogbugz_user_email');
+  variable_del('fogbugz_user_password');
+}
+
+
+/**
+ * Implements hook_requirements().
+ */
+function fogbugz_requirements($phase) {
+  $t = get_t();
+  $requirements = array();
+
+  if ($phase == 'runtime') {
+    if (!extension_loaded('curl') === FALSE) {
+      $requirements['fogbugz'] = array(
+        'title' => $t('Fogbugz'),
+        'value' => $t('curl not Found'),
+        'description' => 'The PHP curl extension was not found.',
+        'severity' => REQUIREMENT_ERROR,
+      );
+    }
+    if (!extension_loaded('simplexml') === FALSE) {
+      $requirements['fogbugz'] = array(
+        'title' => $t('Fogbugz'),
+        'value' => $t('simplexml Not Found'),
+        'description' => 'The PHP simplexml extension was not found.',
+        'severity' => REQUIREMENT_ERROR,
+      );
+    }
+  }
+
+  return $requirements;
+}

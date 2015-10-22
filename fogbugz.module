@@ -1,0 +1,37 @@
+<?php
+
+/**
+ * @file
+ * Provides the basic object definitions used by plugins and handlers.
+ */
+
+/**
+ * Implements hook_menu().
+ */
+function fogbugz_menu() {
+
+  $items['admin/config/fogbugz'] = array(
+    'title' => 'FogBugz URI and Credentials',
+    'description' => 'Configuration of FogBugz URI and credentials',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('fogbugz_admin_configuration_form'),
+    'access arguments' => array('administer site configuration'),
+    'file' => 'fogbugz_admin_configuration.inc',
+    'file path' => drupal_get_path('module', 'fogbugz') . '/forms',
+  );
+
+  return $items;
+}
+
+/**
+ * Implements hook_help().
+ */
+function fogbugz_help($path, $arg) {
+  switch ($path) {
+    case 'admin/help#fogbugz':
+      $output = '';
+      $output .= '<h3>' . t('About') . '</h3>';
+      $output .= '<p>' . t('This module provides functionality to interface with a locally installed <a href="@fogbugzurl">Fogbugz</a> instance API. It does nothing in itself, rather provides an interface for other modules to leverage.', array('@fogbugzurl' => 'http://www.fogcreek.com/fogbugz/')) . '</p>';
+      return $output;
+  }
+}
