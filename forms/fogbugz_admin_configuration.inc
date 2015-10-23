@@ -63,3 +63,39 @@ function fogbugz_admin_configuration_form($form, &$form_state) {
 
   return system_settings_form($form);
 }
+
+/**
+ * Form validation handler for fogbugz_admin_configuration_form().
+ */
+function fogbugz_admin_configuration_form_validate($form, &$form_state) {
+  // Validate email address (Drupal core 7.x fn).
+  $validate_email = trim($form_state['values']['fogbugz_user_email']);
+  if (!valid_email_address($validate_email)) {
+    form_set_error('fogbugz_user_email', t('Please enter a valid email address.'));
+  }
+
+  // Validate password (Fogbugz has min 6 chars + cannot start/end with '-' restriction).
+  $validate_pass = trim($form_state['values']['fogbugz_user_password']);
+  $length_pass = strlen($validate_pass);
+  if ($length_pass < 6 || $validate_pass[0] === '-' || $validate_pass[$length_pass - 1] === '-') {
+    form_set_error('fogbugz_user_password', t('Please enter a valid password.'));
+  }
+
+  // Validate protocol.
+  $validate_uri = trim($form_state['values']['fogbugz_protocol']);
+  if (!ctype_alpha($validate_uri) || strlen($validate_uri) < 3) {
+    form_set_error('fogbugz_protocol', t('Please enter a valid server protocol.'));
+  }
+
+  // Validate hostname field (Drupal core 7.x fn).
+  $validate_host = trim($form_state['values']['fogbugz_hostname']);
+  if (!drupal_valid_http_host($validate_host) || strstr($validate_host, ':')) {
+    form_set_error('fogbugz_hostname', t('Please enter a valid server hostname.'));
+  }
+
+  // Validate port.
+  $validate_port = trim($form_state['values']['fogbugz_port']);
+  if (!ctype_digit($validate_port) || $validate_port < 1 || $validate_port > 48653) {
+    form_set_error('fogbugz_port', t('Please enter a valid server port.'));
+  }
+}
