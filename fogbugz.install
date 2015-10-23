@@ -36,7 +36,7 @@ function fogbugz_requirements($phase) {
   $requirements = array();
 
   if ($phase == 'runtime') {
-    if (!extension_loaded('curl') === FALSE) {
+    if (extension_loaded('curl') === FALSE) {
       $requirements['fogbugz'] = array(
         'title' => $t('Fogbugz'),
         'value' => $t('curl not Found'),
