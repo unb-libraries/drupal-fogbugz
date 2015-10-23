@@ -44,7 +44,7 @@ function fogbugz_requirements($phase) {
         'severity' => REQUIREMENT_ERROR,
       );
     }
-    if (!extension_loaded('SimpleXML') === FALSE) {
+    if (extension_loaded('SimpleXML') === FALSE) {
       $requirements['fogbugz'] = array(
         'title' => $t('Fogbugz'),
         'value' => $t('simplexml Not Found'),
