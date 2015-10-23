@@ -1,7 +1,8 @@
-name = Custom Module
+name = Custom Fogbugz Module
 description = Description of the module.
-package = Views
+package = Other
 core = 7.x
 php = 5.2
 
+configure = admin/config/fogbugz
 files[] = includes/FogbugzConnection.inc
