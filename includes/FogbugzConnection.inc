@@ -46,14 +46,14 @@ class FogbugzConnection {
       $this->connectionToken = (string) $xml->token;
     }
     else {
-      drupal_set_message();
+      drupal_set_message(t('Connection to FogBugz failed. Please contact the site administrator.'), 'error');
     }
   }
 
   /**
    * Post data to the API.
    */
-  private function post($post_data) {
+  public function post($post_data) {
     $post_data['token'] = $this->connectionToken;
     return curl_post_data(
       variable_get('fogbugz_protocol') .
