@@ -45,7 +45,7 @@ function fogbugz_requirements($phase) {
       $description .= $t('The PHP simplexml extension was not found.') . '<br />';
     }
 
-    if (_fogbugz_status_error) {
+    if (_fogbugz_status_error()) {
       $description .= $t('Fogbugz <a href="@fogbugz-configuration">URIs and Credential form</a> has not been configured.', array('@fogbugz-configuration' => url('admin/config/fogbugz')));
     }
 
