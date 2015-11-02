@@ -53,7 +53,7 @@ class FogbugzConnection {
   /**
    * Post data to the API.
    */
-  public function post($post_data) {
+  public function post($post_data, $operation='new') {
     $post_data['token'] = $this->connectionToken;
     return curl_post_data(
       variable_get('fogbugz_protocol') .
@@ -61,7 +61,7 @@ class FogbugzConnection {
       variable_get('fogbugz_hostname') .
       ':' .
       variable_get('fogbugz_port') .
-      '/api.asp?cmd=new',
+      "/api.asp?cmd=$operation",
       $post_data
     );
   }
