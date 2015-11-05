@@ -1,23 +1,8 @@
 <?php
-
 /**
  * @file
- * Provides the basic object definitions used by plugins and handlers.
+ * Provides the basic object definitions for a fogbugz interface.
  */
-
-
-/**
- * Implements hook_init
- */
-function fogbugz_init() {
-  if (user_access('administer site configuration') && _fogbugz_status_error()) {
-    drupal_set_message(t('FogBugz is not configured, please complete and submit the <a href="@fogbugz-configuration">configuration form</a>.',
-      array(
-        '@fogbugz-configuration' => url('admin/config/fogbugz'),
-      )
-    ), 'error');
-  }
-}
 
 /**
  * Implements hook_menu().
@@ -38,6 +23,23 @@ function fogbugz_menu() {
 }
 
 /**
+ * Implements hook_init().
+ */
+function fogbugz_init() {
+  if (user_access('administer site configuration') && _fogbugz_configured() === FALSE) {
+    drupal_set_message(
+      t(
+        'FogBugz is not configured, please complete and submit the <a href="@fogbugz-configuration">configuration form</a>.',
+        array(
+          '@fogbugz-configuration' => url('admin/config/fogbugz'),
+        )
+      ),
+      'error'
+    );
+  }
+}
+
+/**
  * Implements hook_help().
  */
 function fogbugz_help($path, $arg) {
@@ -45,24 +47,36 @@ function fogbugz_help($path, $arg) {
     case 'admin/help#fogbugz':
       $output = '';
       $output .= '<h3>' . t('About') . '</h3>';
-      $output .= '<p>' . t('This module provides functionality to interface with a locally installed <a href="@fogbugzurl">Fogbugz</a> instance API. It does nothing in itself, rather provides an interface for other modules to leverage.', array('@fogbugzurl' => 'http://www.fogcreek.com/fogbugz/')) . '</p>';
+      $output .= '<p>' .
+        t(
+          'This module provides functionality to interface with a locally installed <a href="@fogbugzurl">Fogbugz</a> instance API. It does nothing in itself, rather provides an interface for other modules to leverage.',
+          array(
+            '@fogbugzurl' => 'http://www.fogcreek.com/fogbugz/',
+          )
+        ) .
+        '</p>';
       return $output;
   }
 }
 
 /**
- * Helper function to return whether or not FogBugz configuration form is complete.
+ * Callback : Determine if the FogBugz admin config form was populated.
  */
-function _fogbugz_status_error() {
-  $fogbugz_user_email = variable_get('fogbugz_user_email');
-  $fogbugz_user_password = variable_get('fogbugz_user_password');
-  $fogbugz_protocol = variable_get('fogbugz_protocol');
-  $fogbugz_hostname = variable_get('fogbugz_hostname');
-  $fogbugz_port = variable_get('fogbugz_port');
+function _fogbugz_configured() {
+  $fogbugz_user_email = variable_get('fogbugz_user_email', NULL);
+  $fogbugz_user_password = variable_get('fogbugz_user_password', NULL);
+  $fogbugz_protocol = variable_get('fogbugz_protocol', NULL);
+  $fogbugz_hostname = variable_get('fogbugz_hostname', NULL);
+  $fogbugz_port = variable_get('fogbugz_port', NULL);
 
-  if (is_null($fogbugz_user_email) || is_null($fogbugz_user_password) || is_null($fogbugz_protocol) || is_null($fogbugz_hostname) || is_null($fogbugz_port)) {
-    return TRUE;
-  } else {
+  if (
+    is_null($fogbugz_user_email) ||
+    is_null($fogbugz_user_password) ||
+    is_null($fogbugz_protocol) ||
+    is_null($fogbugz_hostname) ||
+    is_null($fogbugz_port)
+  ) {
     return FALSE;
   }
+  return TRUE;
 }
