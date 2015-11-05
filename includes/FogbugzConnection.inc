@@ -15,7 +15,7 @@ class FogbugzConnection {
    *
    * @var string
    */
-  private $connectionToken = NULL;
+  public $connectionToken = NULL;
 
   /**
    * Constructor.
